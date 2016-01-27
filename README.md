@@ -20,30 +20,33 @@ Or install it yourself as:
 
 ## Usage
 
-Instantiate a client:
+For first-time use, instantiate a client and generate an authentication token:
 
 ```ruby
 client = ZohoCrm::Client.new("zoho@email.com", "myzohopassword")
+auth_token = client.generate_auth_token
 ```
 
-Generate a token:
+This has to be done only once, the first time you start using the API. You can save this token for later use.
+
+Subsequently, when connecting to Zoho, you can just provide your stored authentication token:
 
 ```ruby
-auth_token = client.authenticate_user
+client = ZohoCrm::Client.new("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
 ```
 
-Now that we have a client and an authentication token, we can interact with the Zoho API.
+You can interact with the Zoho API now.
 
 The methods for the Contacts module are as follows:
 
 ```ruby
-client.retrieve_contacts(auth_token, from_index, to_index)
+client.retrieve_contacts(from_index, to_index)
 ```
 
 The maximum number of records returned in one request is 200. For example, to retrieve the fist 200 contacts the method would be:
 
 ```ruby
-client.retrieve_contacts("my_zoho_api_token", 1, 200)
+client.retrieve_contacts(1, 200)
 ```
 
 Which returns a response in JSON format.
@@ -60,13 +63,13 @@ data = {
 **id** is the Zoho Contact ID which is part of the JSON response returned by the **retrieve_contacts** method.
 
 ```ruby
-client.new_contact(auth_token, data)
+client.new_contact(data)
 ```
 
 Up to 200 new Contacts can be added in batches using the **multiple_new_contacts** method.
 
 ```ruby
-client.multiple_new_contacts(auth_token, data)
+client.multiple_new_contacts(data)
 ```
 
 Where **data** is an array of hashes
@@ -79,7 +82,7 @@ data = [
 ```
 
 ```ruby
-client.update_contact(auth_token, data, id)
+client.update_contact(data, id)
 ```
 
 To update an individual Contact.
@@ -89,7 +92,7 @@ Only the fields being updated need to be supplied in **data**. The other fields 
 Up to 100 Contacts can be updated in batches using the **update_multiple_contacts** method.
 
 ```ruby
-client.update_multiple_contacts(auth_token, data)
+client.update_multiple_contacts(data)
 ```
 
 Where **data** is an array of hashes and the **ID** of the Contact must be given.
@@ -103,7 +106,7 @@ data = [
 ```
 
 ```ruby
-client.delete_contact(auth_token, id)
+client.delete_contact(id)
 ```
 
 Zoho requires **last_name** for Contacts. zoho_crm supported field names for the Contacts module are:
@@ -133,7 +136,7 @@ Limitations of these fields can be found at https://www.zoho.com/crm/help/api/mo
 The methods for the Leads module are as follows:
 
 ```ruby
-client.retrieve_leads(auth_token, from_index, to_index)
+client.retrieve_leads(from_index, to_index)
 ```
 
 The maximum number of records returned in one request is 200. For example, to retrieve the fist 200 leads the method would be:
@@ -156,13 +159,13 @@ data = {
 **id** is the Zoho Lead ID which is part of the JSON response returned by the **retrieve_leads** method.
 
 ```ruby
-client.new_lead(auth_token, data)
+client.new_lead(data)
 ```
 
 Up to 200 new Leads can be added in batches using the **multiple_new_leads** method.
 
 ```ruby
-client.multiple_new_leads(auth_token, data)
+client.multiple_new_leads(data)
 ```
 
 Where **data** is an array of hashes
@@ -175,7 +178,7 @@ data = [
 ```
 
 ```ruby
-client.update_lead(auth_token, data, id)
+client.update_lead(data, id)
 ```
 
 To update an individual Lead.
@@ -185,7 +188,7 @@ Only the fields being updated need to be supplied in **data**. The other fields 
 Up to 100 Leads can be updated in batches using the **update_multiple_leads** method.
 
 ```ruby
-client.update_multiple_leads(auth_token, data)
+client.update_multiple_leads(data)
 ```
 
 Where **data** is an array of hashes and the **ID** of the Lead must be given.
@@ -199,7 +202,7 @@ data = [
 ```
 
 ```ruby
-client.delete_lead(auth_token, id)
+client.delete_lead(id)
 ```
 
 Zoho requires **last_name** and **company** for Leads. The zoho_crm supported field names for the Leads module are:
@@ -227,7 +230,7 @@ Limitations of these fields can be found at https://www.zoho.com/crm/help/api/mo
 The fields for both the Contacts and Leads modules can be obtained with the following method:
 
 ```ruby
-client.get_fields(auth_token, module_name)
+client.get_fields(module_name)
 ```
 
 Which returns a response in JSON format.
