@@ -16,6 +16,8 @@ module ZohoCrm
     AUTH_URL = "https://accounts.zoho.com/apiauthtoken/nb/create?SCOPE=ZohoCRM/crmapi&"
     GET_LEADS = "https://crm.zoho.com/crm/private/json/Leads/getRecords?"
     GET_CONTACTS = "https://crm.zoho.com/crm/private/json/Contacts/getRecords?"
+    GET_USERS = "https://crm.zoho.com/crm/private/json/Users/getUsers?"
+    GET_ACCOUNTS = "https://crm.zoho.com/crm/private/json/Accounts/getRecords?"
     NEW_LEAD = "https://crm.zoho.com/crm/private/xml/Leads/insertRecords?"
     NEW_CONTACT = "https://crm.zoho.com/crm/private/xml/Contacts/insertRecords?"
     UPDATE_LEAD = "http://crm.zoho.com/crm/private/xml/Leads/updateRecords?"
@@ -52,6 +54,12 @@ module ZohoCrm
     def retrieve_contacts(from_index, to_index)
       all_contacts = GET_CONTACTS + "authtoken=#{@auth_token}&scope=crmapi&fromIndex=#{from_index}&toIndex=#{to_index}"
       response = HTTParty.get(all_contacts)
+      raise_api_exception(response)
+    end
+
+    def retrieve_accounts
+      all_contacts = GET_ACCOUNTS + "authtoken=#{@auth_token}&scope=crmapi"
+      response = HTTParty.get(all_contacts, {format: :json})
       raise_api_exception(response)
     end
 
@@ -142,6 +150,12 @@ module ZohoCrm
       formatted_data = escape_xml(xml_data)
       update_leads = UPDATE_LEADS + "authtoken=#{@auth_token}&scope=crmapi&version=4&xmlData=#{formatted_data}"
       response = HTTParty.post(update_leads)
+      raise_api_exception(response)
+    end
+
+    def retrieve_users()
+      ap all_users = GET_USERS + "authtoken=#{@auth_token}&scope=crmapi&type=AllUsers"
+      response = HTTParty.get(all_users)
       raise_api_exception(response)
     end
 
